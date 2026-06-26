@@ -16,10 +16,26 @@ def carregar():
     return []
 
 
-
 def salvar(dados):
     with open(arquivo, "w", encoding="utf-8") as f:
         json.dump(dados, f, indent=4, ensure_ascii=False)
+
+
+
+def receber_documentos(lista):
+    print("\n--- receber documentos ---")
+
+    fornecedor = input("Fornecedor: ")
+    valor = float(input("Valor: "))
+
+    lista.append({
+        "fornecedor": fornecedor,
+        "valor": valor,
+        "status": "recebido"
+    })
+
+    salvar(lista)
+    print("documento registrado com sucesso")
 
 
 
@@ -35,8 +51,6 @@ def conferir_liberacao(lista):
 
     if not encontrou:
         print("Nenhum pagamento recebido.")
-
-    print("verificação concluída.")
 
 
 
@@ -56,7 +70,6 @@ def solicitar_autorizacao(lista):
     print("processo atualizado")
 
 
-
 def efetuar_pagamento(lista):
     print("\n--- efetuar pagamento ---")
 
@@ -70,32 +83,41 @@ def efetuar_pagamento(lista):
 
 
 
-
 def enviar_contabilidade(lista):
     print("\n--- contabilidade ---")
+
+    if not lista:
+        print("Nenhum dado para relatório.")
+        return
 
     with open("relatorio_pagamentos.txt", "w", encoding="utf-8") as f:
         f.write("RELATÓRIO DE PAGAMENTOS\n")
         f.write("=" * 40 + "\n\n")
+
+        total = 0
 
         for item in lista:
             f.write(f"Fornecedor: {item.get('fornecedor', 'N/A')}\n")
             f.write(f"Valor: R$ {item.get('valor', 0)}\n")
             f.write(f"Status: {item.get('status', 'N/A')}\n")
 
+            if item.get("status") == "pago":
+                total += item.get("valor", 0)
+
             if "data_pagamento" in item:
                 f.write(f"Data pagamento: {item['data_pagamento']}\n")
 
             f.write("-" * 40 + "\n")
 
+        f.write(f"\nTOTAL PAGO: R$ {total}\n")
+
     print("relatório enviado para contabilidade")
 
 
-
 def menu():
-    lista = carregar()
-
     while True:
+        lista = carregar()
+
         print("""
 =====================
 SISTEMA DE PAGAMENTOS
@@ -110,16 +132,17 @@ SISTEMA DE PAGAMENTOS
 
         opcao = input("escolha: ")
 
-        if opcao == "2":
+        if opcao == "1":
+            receber_documentos(lista)
+
+        elif opcao == "2":
             conferir_liberacao(lista)
 
         elif opcao == "3":
             solicitar_autorizacao(lista)
-            salvar(lista)
 
         elif opcao == "4":
             efetuar_pagamento(lista)
-            salvar(lista)
 
         elif opcao == "5":
             enviar_contabilidade(lista)
@@ -130,7 +153,6 @@ SISTEMA DE PAGAMENTOS
 
         else:
             print("Opção inválida")
-
 
 
 menu()
