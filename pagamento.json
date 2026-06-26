@@ -10,5 +10,11 @@
         "valor": 2222222231.0,
         "status": "pago",
         "data_pagamento": "2026-06-26 20:13:20.962721"
+    },
+    {
+        "fornecedor": "wakanda",
+        "valor": 3535675.0,
+        "status": "pago",
+        "data_pagamento": "2026-06-26 20:18:59.356963"
     }
 ]

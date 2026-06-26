@@ -11,5 +11,10 @@ Valor: R$ 2222222231.0
 Status: pago
 Data pagamento: 2026-06-26 20:13:20.962721
 ----------------------------------------
+Fornecedor: wakanda
+Valor: R$ 3535675.0
+Status: pago
+Data pagamento: 2026-06-26 20:18:59.356963
+----------------------------------------
 
-TOTAL PAGO: R$ 2222322231.0
+TOTAL PAGO: R$ 2225857906.0
