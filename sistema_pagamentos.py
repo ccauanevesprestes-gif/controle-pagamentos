@@ -53,7 +53,6 @@ def conferir_liberacao(lista):
         print("Nenhum pagamento recebido.")
 
 
-
 def solicitar_autorizacao(lista):
     print("\n--- solicitar autorização ---")
 
@@ -80,7 +79,6 @@ def efetuar_pagamento(lista):
 
     salvar(lista)
     print("pagamentos efetuados.")
-
 
 
 def enviar_contabilidade(lista):
@@ -116,7 +114,7 @@ def enviar_contabilidade(lista):
 
 def menu():
     while True:
-        lista = carregar()
+        lista = carregar()  # sempre atualiza os dados
 
         print("""
 =====================
@@ -140,9 +138,11 @@ SISTEMA DE PAGAMENTOS
 
         elif opcao == "3":
             solicitar_autorizacao(lista)
+            salvar(lista)
 
         elif opcao == "4":
             efetuar_pagamento(lista)
+            salvar(lista)
 
         elif opcao == "5":
             enviar_contabilidade(lista)
@@ -153,6 +153,7 @@ SISTEMA DE PAGAMENTOS
 
         else:
             print("Opção inválida")
+
 
 
 menu()

@@ -1,3 +1,15 @@
 RELATÓRIO DE PAGAMENTOS
 ========================================
 
+Fornecedor: lebrom james
+Valor: R$ 100000.0
+Status: pago
+Data pagamento: 2026-06-26 20:13:20.962252
+----------------------------------------
+Fornecedor: bil gates
+Valor: R$ 2222222231.0
+Status: pago
+Data pagamento: 2026-06-26 20:13:20.962721
+----------------------------------------
+
+TOTAL PAGO: R$ 2222322231.0
