@@ -1,15 +1,20 @@
-
+import json
 from datetime import datetime
 import os
 
 arquivo = "pagamento.json"
 
 
+
 def carregar():
     if os.path.exists(arquivo):
         with open(arquivo, "r", encoding="utf-8") as f:
-            return json.load(f)
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []
     return []
+
 
 
 def salvar(dados):
@@ -17,14 +22,22 @@ def salvar(dados):
         json.dump(dados, f, indent=4, ensure_ascii=False)
 
 
+
 def conferir_liberacao(lista):
     print("\n--- conferir liberação ---")
+
+    encontrou = False
 
     for item in lista:
         if item["status"] == "recebido":
             print(item)
+            encontrou = True
+
+    if not encontrou:
+        print("Nenhum pagamento recebido.")
 
     print("verificação concluída.")
+
 
 
 def solicitar_autorizacao(lista):
@@ -32,7 +45,7 @@ def solicitar_autorizacao(lista):
 
     for item in lista:
         if item["status"] == "recebido":
-            resposta = input(f"Aprovar pagamento de R${item['valor']}? (s/n): ")
+            resposta = input(f"Aprovar pagamento de R$ {item['valor']}? (s/n): ")
 
             if resposta.lower() == "s":
                 item["status"] = "aprovado"
@@ -41,6 +54,7 @@ def solicitar_autorizacao(lista):
 
     salvar(lista)
     print("processo atualizado")
+
 
 
 def efetuar_pagamento(lista):
@@ -55,14 +69,27 @@ def efetuar_pagamento(lista):
     print("pagamentos efetuados.")
 
 
+
+
 def enviar_contabilidade(lista):
     print("\n--- contabilidade ---")
 
     with open("relatorio_pagamentos.txt", "w", encoding="utf-8") as f:
-        for item in lista:
-            f.write(str(item) + "\n")
+        f.write("RELATÓRIO DE PAGAMENTOS\n")
+        f.write("=" * 40 + "\n\n")
 
-    print("relatorio enviado para contabilidade")
+        for item in lista:
+            f.write(f"Fornecedor: {item.get('fornecedor', 'N/A')}\n")
+            f.write(f"Valor: R$ {item.get('valor', 0)}\n")
+            f.write(f"Status: {item.get('status', 'N/A')}\n")
+
+            if "data_pagamento" in item:
+                f.write(f"Data pagamento: {item['data_pagamento']}\n")
+
+            f.write("-" * 40 + "\n")
+
+    print("relatório enviado para contabilidade")
+
 
 
 def menu():
@@ -88,9 +115,11 @@ SISTEMA DE PAGAMENTOS
 
         elif opcao == "3":
             solicitar_autorizacao(lista)
+            salvar(lista)
 
         elif opcao == "4":
             efetuar_pagamento(lista)
+            salvar(lista)
 
         elif opcao == "5":
             enviar_contabilidade(lista)
@@ -101,6 +130,7 @@ SISTEMA DE PAGAMENTOS
 
         else:
             print("Opção inválida")
+
 
 
 menu()
